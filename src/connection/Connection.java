@@ -6,7 +6,7 @@ import java.sql.SQLException;
 public class Connection {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		//url connessione
 		String connectionString = "jdbc:sqlite:HearthStone.db";
 		
 		java.sql.Connection connection = null;
@@ -19,7 +19,17 @@ public class Connection {
 			connection = DriverManager.getConnection(connectionString);
 			System.out.println("Connessione stabilita!");
 			
-			connection.close();	
+			//creazione statement
+			Statement stm = connection.createStatement();
+			
+			//esecuzione del comando
+			ResultSet rs = stm.executeQuery("select * from eroi");
+			
+			//stampa dei risultati
+			while(rs.next())
+			{
+				System.out.println(rs.getString("nome") + " " + rs.getString("cognome") + " della specie " + rs.getString("specie"));
+			}
 		}
 		catch(SQLException e)
 		{
@@ -28,6 +38,17 @@ public class Connection {
 		catch(ClassNotFoundException e)
 		{
 			System.out.println(e.getMessage());
+		}
+		finally 
+		{
+			try {
+				if(connection!=null)
+					connection.close();
+			}
+			catch(SQLException e)
+			{
+				//gestione eccezione
+			}
 		}
 	}
 
